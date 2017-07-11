@@ -1,14 +1,14 @@
-function laser_lines = Measure_laser(RDK, Obstacles)
+function laser_lines = Measure_laser(RDK, Obstacles, Rays)
     vertices = zeros(5,2,length(Obstacles));
     center = [RDK.x RDK.y];
     for i = 1:length(Obstacles)
         vertices(:,:,i) = Square_graph_model (Obstacles(i));
     end
-    laser_lines = zeros(2,2,20);
-    for i=1:20
+    laser_lines = zeros(2,2,Rays);
+    for i=1:Rays
         obstacle_stops_the_ray = false;
         ray.start = center;
-        ray.angle = pi_to_pi(((i*18/180)*pi)+RDK.theta);
+        ray.angle = pi_to_pi(((i*(360/Rays)/180)*pi)+RDK.theta);
         
         x = cos(ray.angle)*5;
         
