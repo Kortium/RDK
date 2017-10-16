@@ -1,3 +1,5 @@
+% Файл для создания массива с препятствиями
+
 function Obstacle_generator
     obstacles = [];
     i=1;
