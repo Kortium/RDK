@@ -1,4 +1,7 @@
-function laser_lines = Measure_laser(RDK, Obstacles, Rays)
+function laser_lines = Measure_laser(RDK, Obstacles, Rays, Ray_length)
+    if (nargin<4) 
+        Ray_length = 5;
+    end
     vertices = zeros(5,2,length(Obstacles));
     center = [RDK.x RDK.y];
     for i = 1:length(Obstacles)
@@ -10,7 +13,7 @@ function laser_lines = Measure_laser(RDK, Obstacles, Rays)
         ray.start = center;
         ray.angle = pi_to_pi(((i*(360/Rays)/180)*pi)+RDK.theta);
         
-        x = cos(ray.angle)*5;
+        x = cos(ray.angle)*Ray_length;
         
         ray.end = [x+ray.start(1), tan(ray.angle)*x+ray.start(2)];
         for j=1:length(Obstacles)
