@@ -8,7 +8,7 @@ function RDK_Sim(obstacles, showlaser, trajectory)
     V = 1;
     w = 0.2;
     dt = 0.1;
-    rays = 360;
+    rays = 200;
     Ray_length = 7;
     model = Triangle_graph_model(RDK);
     if nargin > 2
@@ -20,30 +20,40 @@ function RDK_Sim(obstacles, showlaser, trajectory)
     end
     
     f = figure('Visible','on','Name','RDK move','NumberTitle','off');
-    ax = axes('Units', 'normalized', 'Position', [0.1 0.1 0.35 0.8]);
-    ax2 = axes('Units', 'normalized', 'Position', [0.55 0.1 0.35 0.8]);
-    axes(ax)
-    ax.XLim = [-20 20];
-    ax.YLim = [-15 15];
+    ax = axes('Units', 'normalized', 'Position', [0.05 0.05 0.4 0.4]);
+    ax2 = axes('Units', 'normalized', 'Position', [0.05 0.55 0.4 0.4]);
+    ax3 = axes('Units', 'normalized', 'Position', [0.55 0.05 0.4 0.4]);
+    
+    axes(ax2)
+    obstacle_plots(1) = plot(ax2,0,0,'r');
+    hold on
+    ax2.XLim = [-20 20];
+    ax2.YLim = [-15 15];
     axis equal
     grid on
-    axes(ax2)
+    
+    axes(ax3)
     [cx, cy] = circle(0, 0, Ray_length);
     plot(cx, cy, 'Color',[0.6 0.6 0.6],'linewidth',3);
     hold on
     tri.x = 0;
     tri.y = 0;
-    tri.theta = pi/2;
+    tri.theta = 0;
     tri.model = Triangle_graph_model(tri);
     plot(cx, cy, 'Color',[0.6 0.6 0.6]);
     plot(tri.model(:,1),tri.model(:,2),'b','linewidth',3);
-    measure_plot = scatter(ax2,0,0,'.','r');
-    ax2.XLim = [-Ray_length*1.1 Ray_length*1.1];
-    ax2.YLim = [-Ray_length*1.1 Ray_length*1.1];
+    measure_plot = scatter(ax3,0,0,'.','r');
+    ax3.XLim = [-Ray_length*1.1 Ray_length*1.1];
+    ax3.YLim = [-Ray_length*1.1 Ray_length*1.1];
     axis equal
     grid on
+    
     axes(ax)
+    ax.XLim = [-20 20];
+    ax.YLim = [-15 15];
     RDK_plot = plot(ax,model(:,1), model(:,2),'b','linewidth',3);
+    axis equal
+    grid on
     if nargin > 1 && showlaser
         hold on;
         Laser_plot = plot(ax,0, 0,'g','linewidth',1,'MarkerSize',10);
@@ -56,6 +66,11 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         if nargin > 1 && showlaser
             laser_model = Laser_Lines_Draw(laser_lines);
         end
+        measure_model = Measure_draw(laser_lines, Ray_length);
+        measured_obstacles = Find_obstacles(measure_model);
+        measured_obstacles = Convert_obstacle(RDK, measured_obstacles);
+%         move_collisions = Collision_detection(RDK,measured_obstacles);
+        
         
         %check target
         if point_reached(RDK)
@@ -78,15 +93,30 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         end
         ax.XLim = [-20 20];
         ax.YLim = [-15 15];
-        axis equal
-        grid on
-        axes(ax2)
-        measure_model = measure_draw(laser_lines, Ray_length);
+        
+        obstacle_plots = plot_measured_obstacles(measured_obstacles, ax2, obstacle_plots);
+        ax2.XLim = [-20 20];
+        ax2.YLim = [-15 15];
         set(measure_plot,'xdata',measure_model(:,1),'ydata', measure_model(:,2));
-        axis equal
-        grid on
+
         drawnow
 %         pause(0.1);
+    end
+end
+
+function plots = plot_measured_obstacles(measured_obstacles, axes, plots)
+    n_obstacles = length(measured_obstacles);
+    n_plots = length(plots);
+    for i = 1:n_plots
+        set(plots(i),'xdata',[0,0],'ydata',[0,0]);
+    end
+    if (n_plots<n_obstacles)
+        for i = n_plots:n_obstacles
+            plots(i) = plot(axes,0,0,'r');
+        end
+    end
+    for i=1:n_obstacles
+        set(plots(i),'xdata',measured_obstacles(i).points(:,1),'ydata',measured_obstacles(i).points(:,2));
     end
 end
 

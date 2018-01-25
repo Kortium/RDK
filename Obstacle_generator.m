@@ -44,7 +44,7 @@ function Obstacle_generator
         ax.YLim = [-10 10];
         axis equal
         grid on
-        angle = angle+pi/11;
+%         angle = angle+pi/11;
         i = i+1;
     end
 

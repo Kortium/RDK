@@ -16,16 +16,26 @@ function laser_lines = Measure_laser(RDK, Obstacles, Rays, Ray_length)
         x = cos(ray.angle)*Ray_length;
         
         ray.end = [x+ray.start(1), tan(ray.angle)*x+ray.start(2)];
+        laser_lines(1,:,i) = ray.start;
+        laser_lines(2,:,i) = ray.end;
+        
         for j=1:length(Obstacles)
             intersection = Get_ray_intersection_with_obstacle(ray,vertices(:,:,j));
             if intersection
-                laser_lines(2,:,i) = intersection;
-                obstacle_stops_the_ray = true;
+                if (length_ray(laser_lines(:,:,i),intersection)<length_ray(laser_lines(:,:,i)))
+                    laser_lines(2,:,i) = intersection;
+                end
             end
         end
-        laser_lines(1,:,i) = ray.start;
-        if ~obstacle_stops_the_ray
-            laser_lines(2,:,i) = ray.end;
-        end
     end
+end
+
+function length = length_ray(laser_line, point)
+    start = laser_line(1,:);
+    if nargin<2
+        fin = laser_line(2,:);
+    else
+        fin = point;
+    end
+    length = sqrt((start(1)-fin(1))^2 +(start(2)-fin(2))^2);
 end

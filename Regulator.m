@@ -16,7 +16,7 @@ function [V,w] = Regulator(RDK)
     
     V_dist = distance_to_target*heading_k(d_heading)*0.07;
     if V_dist>0.15
-        V = 0.6;
+        V = 1;
     else
         V = 0.05*sign(pi/2 - d_heading) + V_dist*sign(pi/2-d_heading);
     end
