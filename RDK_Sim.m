@@ -68,7 +68,9 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         end
         measure_model = Measure_draw(laser_lines, Ray_length);
         measured_obstacles = Find_obstacles(measure_model);
+        measured_obstacles = Join_obstacles(measured_obstacles);
         measured_obstacles = Convert_obstacle(RDK, measured_obstacles);
+        
 %         move_collisions = Collision_detection(RDK,measured_obstacles);
         
         

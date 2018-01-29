@@ -6,7 +6,7 @@ function check=Check_if_measure_of_obstacles(dot,obstacle)
         else
             obp = obstacle.points(i,:);
         end
-        d = sqrt((dot(1)-obp(1))^2 +(dot(2)-obp(2))^2);
+        d = distance_between_points(dot,obp);
         check = d<0.6;
         if check 
             break
