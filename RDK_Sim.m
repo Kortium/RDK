@@ -61,7 +61,7 @@ function RDK_Sim(obstacles, showlaser, trajectory)
     end
 
     Init_obstacles(obstacles, ax);
-    for i = 1:10000
+    for i = 1:2000
         %measurement
         laser_lines = Measure_laser(RDK, obstacles, rays, Ray_length);
         if nargin > 1 && showlaser
@@ -104,6 +104,13 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         set(measure_plot,'xdata',measure_model(:,1),'ydata', measure_model(:,2));
 
         drawnow
+        %RDK speed projections on X and Y axes.
+        %The first line of "projections" matrix is X-projections
+        %The second line is Y-projections
+        Vx(i) = V*cos(RDK.theta);
+        Vy(i) = V*sin(RDK.theta);
+        Vproj = [Vx;Vy];
+        assignin('base','projections',Vproj)
 %         pause(0.1);
     end
 end
