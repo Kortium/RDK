@@ -1,4 +1,5 @@
 function RDK_Sim(obstacles, showlaser, trajectory)
+	%Comment
     RDK.x = -6;
     RDK.y = -6;
     RDK.targetX = 0;
