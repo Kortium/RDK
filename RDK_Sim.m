@@ -9,7 +9,7 @@ function RDK_Sim(obstacles, showlaser, trajectory)
     V = 1;
     w = 0.2;
     dt = 0.1;
-    rays = 200;
+    rays = 360;
     Ray_length = 7;
     model = Triangle_graph_model(RDK);
     if nargin > 2
