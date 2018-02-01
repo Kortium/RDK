@@ -55,14 +55,20 @@ function Obstacle_generator
         obstacles(i).x = dot(1);
         obstacles(i).y = dot(2);
         obstacles(i).theta = angle;
+%Obstacle type 1 -- Square
+%         type 2 -- Triangle
+%         type 3 -- Rectangle
         if SquareSelect.Value == true
             model = Square_graph_model(obstacles(i));
+            obstacles(i).Type = 1;
         end
         if TriangleSelect.Value == true
             model = Triangle_graph_model(obstacles(i));
+            obstacles(i).Type = 2;
         end
         if RectangleSelect.Value == true
             model = Rectangle_graph_model(obstacles(i));
+            obstacles(i).Type = 3;
         end
         line(ax,model(:,1), model(:,2),'color','r','linewidth',5);
         ax.XLim = [-10 10];
