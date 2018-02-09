@@ -57,6 +57,7 @@ function Obstacle_generator
         obstacles(i).theta = angle;
         if SquareSelect.Value == true
             model = Square_graph_model(obstacles(i));
+            obstacles(i).type = 'square';
         end
         if TriangleSelect.Value == true
             model = Triangle_graph_model(obstacles(i));
