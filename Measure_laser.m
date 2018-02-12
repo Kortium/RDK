@@ -9,7 +9,7 @@ function laser_lines = Measure_laser(RDK, Obstacles, Rays, Ray_length)
         vertices(:,:,i) = Square_graph_model (Obstacles(i));
         end
         if Obstacles(i).Type == 2
-        vertices(:,:,i) = Triangle_graph_model (Obstacles(i));
+        vertices(:,:,i) = Big_triangle_graph_model (Obstacles(i));
         end
         if Obstacles(i).Type == 3
         vertices(:,:,i) = Rectangle_graph_model (Obstacles(i));

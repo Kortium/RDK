@@ -5,7 +5,7 @@ function Init_obstacles(obstacles,plot)
             squares = line(plot,model(:,1), model(:,2),'color','r','linewidth',2);
         end
         if obstacles(i).Type == 2
-            model = Triangle_graph_model(obstacles(i));
+            model = Big_triangle_graph_model(obstacles(i));
             squares(i) = line(plot,model(:,1), model(:,2),'color','r','linewidth',2);
         end
         if obstacles(i).Type == 3
