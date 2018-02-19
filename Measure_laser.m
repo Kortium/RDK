@@ -1,4 +1,4 @@
-function laser_lines = Measure_laser(RDK, Obstacles, Rays, Ray_length)
+function [laser_lines, measured_distance]  = Measure_laser(RDK, Obstacles, Rays, Ray_length)
     if (nargin<4) 
         Ray_length = 5;
     end
@@ -16,6 +16,7 @@ function laser_lines = Measure_laser(RDK, Obstacles, Rays, Ray_length)
         end
     end
     laser_lines = zeros(2,2,Rays);
+    measured_distance = zeros(1,Rays);
     for i=1:Rays
         obstacle_stops_the_ray = false;
         ray.start = center;
@@ -35,6 +36,7 @@ function laser_lines = Measure_laser(RDK, Obstacles, Rays, Ray_length)
                 end
             end
         end
+        measured_distance(i) = length_ray(laser_lines(:,:,i));
     end
 end
 
