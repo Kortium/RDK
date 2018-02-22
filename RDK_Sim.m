@@ -19,6 +19,7 @@ function RDK_Sim(obstacles, showlaser, trajectory)
     else
         traj = [0,0;6,3];
     end
+    Avoiding_obstacle = false;
     
     f = figure('Visible','on','Name','RDK sim','NumberTitle','off');
     ax = axes('Units', 'normalized', 'Position', [0.05 0.05 0.4 0.4]);
@@ -58,7 +59,7 @@ function RDK_Sim(obstacles, showlaser, trajectory)
     RDK_collision_plot = plot(ax4,model(:,1), model(:,2),'b','linewidth',3);
     Init_obstacles(obstacles, ax4);
     target_line = plot(ax4,0,0,'g','linewidth',1);
-    collision_plot = scatter(ax4,0,0,'*','r');
+    collision_plot = scatter(ax4,0,0,'*','g');
     axis equal
     grid on
     
@@ -85,9 +86,18 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         measured_obstacles = Find_obstacles(measure_model);
         measured_obstacles = Join_obstacles(measured_obstacles);
         measured_obstacles = Convert_obstacle(RDK, measured_obstacles);
-        measured_obstacles = Sort_obstacles(measured_obstacles);
+        measured_obstacles = Sort_obstacles(RDK, measured_obstacles);
         
         move_collisions = Collision_detection(RDK,measured_obstacles);
+%         if ~isempty(move_collisions)
+%             new_point = work_around(RDK, move_collisions, measured_obstacles);
+%             if ~Avoiding_obstacle
+%                 Avoiding_obstacle = true;
+%                 point_id = rem(point_id,length(traj))-1;
+%             end
+%             RDK.targetX = traj(point_id,1);
+%             RDK.targetY = traj(point_id,2);
+%         end
         
         
         %check target
@@ -119,6 +129,10 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         set(measure_plot,'xdata',measure_model(:,1),'ydata', measure_model(:,2));
         
         set(RDK_collision_plot,'xdata',model(:,1),'ydata', model(:,2));
+        set(target_line,'xdata',[RDK.x, RDK.targetX],'ydata', [RDK.y, RDK.targetY]);
+        if (move_collisions)
+            set(collision_plot,'xdata',move_collisions(:,1),'ydata', move_collisions(:,2));
+        end
         drawnow
         %RDK speed projections on X and Y axes.
         %The first line of "projections" matrix is X-projections
@@ -142,7 +156,7 @@ function plots = plot_measured_obstacles(measured_obstacles, axes, plots)
             plots(i) = plot(axes,0,0,'r');
         end
     end
-    if n_obstacles>1
+    if n_obstacles>=1
         for i=1:n_obstacles
             x1 = measured_obstacles(i).points(1,1);
             y1 = measured_obstacles(i).points(1,2);

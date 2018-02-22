@@ -2,7 +2,7 @@ function converted_obstacles = Convert_obstacle(RDK, obstacles)
     angle = RDK.theta;
     DCM = [cos(angle) sin(angle); -sin(angle) cos(angle)];
     converted_obstacles = obstacles;
-    if length(obstacles)>1
+    if length(obstacles)>=1
         for i=1:length(obstacles)
             obstacle = obstacles(i);
             obstacle.points = obstacle.points*DCM;
