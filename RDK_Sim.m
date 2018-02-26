@@ -76,7 +76,7 @@ function RDK_Sim(obstacles, showlaser, trajectory)
     end
 
     Init_obstacles(obstacles, ax);
-    for i = 1:2000
+    for i = 1:6000
         %measurement
         laser_lines = Measure_laser(RDK, obstacles, rays, Ray_length);
         if nargin > 1 && showlaser
@@ -88,20 +88,21 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         measured_obstacles = Convert_obstacle(RDK, measured_obstacles);
         measured_obstacles = Sort_obstacles(RDK, measured_obstacles);
         
-        move_collisions = Collision_detection(RDK,measured_obstacles);
-%         if ~isempty(move_collisions)
-%             new_point = work_around(RDK, move_collisions, measured_obstacles);
-%             if ~Avoiding_obstacle
-%                 Avoiding_obstacle = true;
-%                 point_id = rem(point_id,length(traj))-1;
-%             end
-%             RDK.targetX = traj(point_id,1);
-%             RDK.targetY = traj(point_id,2);
-%         end
+        [move_collisions, collision_obstacles] = Collision_detection(RDK,measured_obstacles);
+        if ~isempty(move_collisions)
+            new_point = work_around(RDK, move_collisions, collision_obstacles);
+            if ~Avoiding_obstacle
+                Avoiding_obstacle = true;
+                point_id = rem(point_id-1,length(traj));
+            end
+            RDK.targetX = new_point(1);
+            RDK.targetY = new_point(2);
+        end
         
         
         %check target
         if point_reached(RDK)
+            Avoiding_obstacle = false;
             point_id = rem(point_id,length(traj))+1;
             RDK.targetX = traj(point_id,1);
             RDK.targetY = traj(point_id,2);

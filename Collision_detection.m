@@ -1,10 +1,10 @@
-function collision_points = Collision_detection(RDK,measured_obstacles)
+function [collision_points, obstacles] = Collision_detection(RDK,measured_obstacles)
     section = [RDK.x, RDK.y; RDK.targetX, RDK.targetY];
     angle = RDK.theta;
     collision_points = [];
-    DCM = [cos(angle) sin(angle); -sin(angle) cos(angle)];
+    obstacles = [];
     k=1;
-    if length(measured_obstacles)>1
+    if length(measured_obstacles)>=1
         for i=1:length(measured_obstacles)
             obstacle = measured_obstacles(i);
             intersections = Get_section_intersection_with_obstacle(section, obstacle);
@@ -12,6 +12,7 @@ function collision_points = Collision_detection(RDK,measured_obstacles)
                 for j=1:size(intersections,1)
                     try
                         collision_points(k,:)=intersections(j,:);
+                        obstacles(k).points = obstacle;
                         k=k+1;
                     catch
                         k=k+1;
@@ -19,8 +20,5 @@ function collision_points = Collision_detection(RDK,measured_obstacles)
                 end
             end
         end
-    end
-    if isempty(collision_points)
-        collision_points=false;
     end
 end
