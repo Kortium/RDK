@@ -1,8 +1,9 @@
-function obstacle = Sort_single_obstacle(obstacle)
+function obstacle = Sort_single_obstacle(RDK, obstacle)
     x = sum(obstacle.points(:,1));
     y = sum(obstacle.points(:,2));
     l = length(obstacle.points);
-    center=[x/l,y/l];
+%     center=[x/l,y/l];
+    center = [RDK.x, RDK.y];
     angle=zeros(1,l);
     for i=1:l
         point = obstacle.points(i,:);

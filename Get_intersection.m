@@ -12,6 +12,6 @@ function intersection = Get_intersection(ray_segment,obstacle_segment)
         intersection(1) = ray_segment(1,1)+(t*s1(1));
         intersection(2) = ray_segment(1,2)+(t*s1(2));
     else
-        intersection = false;
+        intersection = [];
     end
 end
