@@ -150,8 +150,8 @@ function RDK_Sim(obstacles, showlaser, trajectory)
     end
     assignin('base','projections',Vproj)
     assignin('base','distance',distance)
-    %load handel
-    %sound(y,Fs)
+    load handel
+    sound(y,Fs)
 end
 
 function plots = plot_measured_obstacles(measured_obstacles, axes, plots)
