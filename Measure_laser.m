@@ -1,4 +1,4 @@
-function laser_lines = Measure_laser(RDK, Obstacles, Rays, Ray_length)
+function [laser_lines, measured_distance]  = Measure_laser(RDK, Obstacles, Rays, Ray_length)
     if (nargin<4) 
         Ray_length = 5;
     end
@@ -9,13 +9,14 @@ function laser_lines = Measure_laser(RDK, Obstacles, Rays, Ray_length)
         vertices(:,:,i) = Square_graph_model (Obstacles(i));
         end
         if Obstacles(i).Type == 2
-        vertices(:,:,i) = Triangle_graph_model (Obstacles(i));
+        vertices(:,:,i) = Big_triangle_graph_model (Obstacles(i));
         end
         if Obstacles(i).Type == 3
         vertices(:,:,i) = Rectangle_graph_model (Obstacles(i));
         end
     end
     laser_lines = zeros(2,2,Rays);
+    measured_distance = zeros(1,Rays);
     for i=1:Rays
         % Changes here
         obstacle_stops_the_ray = false;
@@ -36,6 +37,7 @@ function laser_lines = Measure_laser(RDK, Obstacles, Rays, Ray_length)
                 end
             end
         end
+        measured_distance(i) = length_ray(laser_lines(:,:,i));
     end
 end
 

@@ -10,6 +10,7 @@ function RDK_Sim(obstacles, showlaser, trajectory)
     w = 0.2;
     dt = 0.1;
     rays = 180;
+    model_steps = 2000;
     Ray_length = 7;
     model = Triangle_graph_model(RDK);
     if nargin > 2
@@ -76,9 +77,13 @@ function RDK_Sim(obstacles, showlaser, trajectory)
     end
 
     Init_obstacles(obstacles, ax);
-    for i = 1:6000
+    distance = zeros(model_steps,rays);
+    Vx = zeros(1,model_steps);
+    Vy = zeros(1,model_steps);
+    for i = 1:model_steps
         %measurement
-        laser_lines = Measure_laser(RDK, obstacles, rays, Ray_length);
+        [laser_lines, measured_distance] = Measure_laser(RDK, obstacles, rays, Ray_length);
+        distance(i,:) = measured_distance;
         if nargin > 1 && showlaser
             laser_model = Laser_Lines_Draw(laser_lines);
         end
@@ -141,9 +146,12 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         Vx(i) = V*cos(RDK.theta);
         Vy(i) = V*sin(RDK.theta);
         Vproj = [Vx;Vy];
-        assignin('base','projections',Vproj)
 %         pause(0.1);
     end
+    assignin('base','projections',Vproj)
+    assignin('base','distance',distance)
+    load handel
+    sound(y,Fs)
 end
 
 function plots = plot_measured_obstacles(measured_obstacles, axes, plots)

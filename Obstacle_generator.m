@@ -30,7 +30,7 @@ function Obstacle_generator
         'Callback', @Get_Out);
     % Type of obstacle selection
     SelectionGroup = uibuttongroup('Visible','on',...
-                                    'Position',[0 0.91 1 1]);
+                                    'Position',[0 0.91 0.5 1]);
     SquareSelect = uicontrol(SelectionGroup,'Style',...
                   'radiobutton',...
                   'String','Square',...
@@ -47,6 +47,8 @@ function Obstacle_generator
                   'Position',[200 5 100 30],...
                   'HandleVisibility','on');
     f.Visible = 'on';
+    AngleSelect = uicontrol('Style','edit','String','0',...
+        'HandleVisibility','on','Position',[350 387 100 30]);
     
     
     
@@ -54,7 +56,7 @@ function Obstacle_generator
         dot = ginput(1);
         obstacles(i).x = dot(1);
         obstacles(i).y = dot(2);
-        obstacles(i).theta = angle;
+        obstacles(i).theta = 0.01745*str2double(get(AngleSelect,'String'));
 %Obstacle type 1 -- Square
 %         type 2 -- Triangle
 %         type 3 -- Rectangle
@@ -63,7 +65,7 @@ function Obstacle_generator
             obstacles(i).Type = 1;
         end
         if TriangleSelect.Value == true
-            model = Triangle_graph_model(obstacles(i));
+            model = Big_triangle_graph_model(obstacles(i));
             obstacles(i).Type = 2;
         end
         if RectangleSelect.Value == true
