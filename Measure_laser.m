@@ -18,8 +18,6 @@ function [laser_lines, measured_distance]  = Measure_laser(RDK, Obstacles, Rays,
     laser_lines = zeros(2,2,Rays);
     measured_distance = zeros(1,Rays);
     for i=1:Rays
-        % Changes here
-        obstacle_stops_the_ray = false;
         ray.start = center;
         ray.angle = pi_to_pi(((i*(360/Rays)/180)*pi)+RDK.theta);
         
