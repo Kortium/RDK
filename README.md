@@ -12,7 +12,8 @@ User guide:
 
 UI
 
-In RDK_Sim there is 3 graphs
+In RDK_Sim there is 4 graphs
 - bottom left: obstacles and bot riding around them
 - bottom right: laser scanner model
 - top left: obstacles found using laser scanner and bot data (heading and coordinates)
+- top right: current target and last potential collision

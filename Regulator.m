@@ -1,7 +1,11 @@
 function [V,w] = Regulator(RDK)
-    x = RDK.targetX - RDK.x;
-    y = RDK.targetY - RDK.y;
-    
+    if ~RDK.Avoiding_obstacle
+        x = RDK.targetX - RDK.x;
+        y = RDK.targetY - RDK.y;
+    else
+        x = RDK.workAroundX - RDK.x;
+        y = RDK.workAroundY - RDK.y;
+    end
     distance_to_target = sqrt(x^2 +y^2);
     
     hct = atan2(y,x);
