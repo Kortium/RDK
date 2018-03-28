@@ -1,4 +1,5 @@
 function [laser_lines, measured_distance]  = Measure_laser(RDK, Obstacles, Rays, Ray_length)
+%«адача организовать шумы измерений
     if (nargin<4) 
         Ray_length = 5;
     end
