@@ -11,7 +11,7 @@ function RDK_Sim(obstacles, showlaser, trajectory)
     dt = 0.1;
     rays = 180;
     model_steps = 2000;
-    Ray_length = 7;
+    Ray_length = 17;
     model = Triangle_graph_model(RDK);
     if nargin > 2
         traj = trajectory;
@@ -177,7 +177,7 @@ end
 function result = point_reached(RDK)
     dist = sqrt((RDK.x-RDK.targetX)^2 +(RDK.y-RDK.targetY)^2);
 
-    if dist < 0.005
+    if dist < 0.05
         result = true;
     else
         result = false;
