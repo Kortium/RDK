@@ -1,14 +1,9 @@
 function RDK_Sim(obstacles, showlaser, trajectory)
 	%Comment
-    RDK.x = -6;
-    RDK.y = -6;
-    RDK.targetX = 0;
-    RDK.targetY = 0;
-    RDK.theta = -pi/4;
+    RDK = RDK_class;
     point_id = 1;
-    V = 1;
-    w = 0.2;
-    dt = 0.1;
+
+    dt = 0.2;
     rays = 180;
     model_steps = 2000;
     Ray_length = 17;
@@ -20,7 +15,6 @@ function RDK_Sim(obstacles, showlaser, trajectory)
     else
         traj = [0,0;6,3];
     end
-    Avoiding_obstacle = false;
     
     f = figure('Visible','on','Name','RDK sim','NumberTitle','off');
     ax = axes('Units', 'normalized', 'Position', [0.05 0.05 0.4 0.4]);
@@ -92,23 +86,27 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         measured_obstacles = Join_obstacles(measured_obstacles);
         measured_obstacles = Convert_obstacle(RDK, measured_obstacles);
         measured_obstacles = Sort_obstacles(RDK, measured_obstacles);
+%         danger_zones = Find_danger_zones(RDK, measured_obstacles);
         
         [move_collisions, collision_obstacles] = Collision_detection(RDK,measured_obstacles);
         if ~isempty(move_collisions)
             new_point = work_around(RDK, move_collisions, collision_obstacles);
-            if ~Avoiding_obstacle
-                Avoiding_obstacle = true;
-                point_id = rem(point_id-1,length(traj));
+            if ~RDK.Avoiding_obstacle
+                RDK.Avoiding_obstacle = true;
             end
-            RDK.targetX = new_point(1);
-            RDK.targetY = new_point(2);
+            RDK.workAroundX = new_point(1);
+            RDK.workAroundY = new_point(2);
+        else
+            RDK.Avoiding_obstacle = false;
         end
         
         
         %check target
         if point_reached(RDK)
-            Avoiding_obstacle = false;
-            point_id = rem(point_id,length(traj))+1;
+            point_id = point_id+1;
+            if (point_id>length(traj))
+                point_id = 1;
+            end
             RDK.targetX = traj(point_id,1);
             RDK.targetY = traj(point_id,2);
         end
@@ -117,7 +115,7 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         [V,w] = Regulator (RDK);
 
         %use of control
-        RDK = RDK_move(RDK, V, w, dt);
+        RDK=RDK.move(V, w, dt);
         
         %draw
         model = Triangle_graph_model(RDK);
@@ -135,7 +133,11 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         set(measure_plot,'xdata',measure_model(:,1),'ydata', measure_model(:,2));
         
         set(RDK_collision_plot,'xdata',model(:,1),'ydata', model(:,2));
-        set(target_line,'xdata',[RDK.x, RDK.targetX],'ydata', [RDK.y, RDK.targetY]);
+        if ~RDK.Avoiding_obstacle
+            set(target_line,'xdata',[RDK.x, RDK.targetX],'ydata', [RDK.y, RDK.targetY]);
+        else
+            set(target_line,'xdata',[RDK.x, RDK.workAroundX],'ydata', [RDK.y, RDK.workAroundY]);
+        end
         if (move_collisions)
             set(collision_plot,'xdata',move_collisions(:,1),'ydata', move_collisions(:,2));
         end
@@ -151,7 +153,7 @@ function RDK_Sim(obstacles, showlaser, trajectory)
     assignin('base','projections',Vproj)
     assignin('base','distance',distance)
     load handel
-    sound(y,Fs)
+%     sound(y,Fs)
 end
 
 function plots = plot_measured_obstacles(measured_obstacles, axes, plots)

@@ -8,7 +8,7 @@ function intersections = Get_section_intersection_with_obstacle(section,obstacle
             j = i-1;
             intersection = Get_intersection(section, vertices(j:i,1:2));
             if ~isempty(intersection)
-                if Length_between(section(:,1),section(:,2))>Length_between(section(:,1),intersection)
+                if Length_between(section(1,:),section(2,:))>Length_between(section(1,:),intersection)
                     intersections(k,:)=intersection;
                     k=k+1;
                 end

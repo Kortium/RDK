@@ -1,17 +1,19 @@
 function new_point = work_around(RDK, move_collisions, obstacles)
-    add_l = 0.4;
+    add_l = 0.6;
     l = length(move_collisions);
     if l>1
         for j=1:l-1
-            lc1 = distance_between_points([RDK.x, RDK.y],move_collisions(j,:));
-            lc2 = distance_between_points([RDK.x, RDK.y],move_collisions(j+1,:));
-            if lc1>lc2
-                mcs = move_collisions(j);
-                move_collisions(j) = move_collisions(j+1);
-                move_collisions(j+1) = mcs;
-                pcs = obstacles(j).points;
-                obstacles(j).points = obstacles(j+1).points;
-                obstacles(j+1).points = pcs;
+            if j<length(move_collisions)-1
+                lc1 = distance_between_points([RDK.x, RDK.y],move_collisions(j,:));
+                lc2 = distance_between_points([RDK.x, RDK.y],move_collisions(j+1,:));
+                if lc1>lc2
+                    mcs = move_collisions(j);
+                    move_collisions(j) = move_collisions(j+1);
+                    move_collisions(j+1) = mcs;
+                    pcs = obstacles(j).points;
+                    obstacles(j).points = obstacles(j+1).points;
+                    obstacles(j+1).points = pcs;
+                end
             end
         end
     end
@@ -34,10 +36,10 @@ function new_point = work_around(RDK, move_collisions, obstacles)
 
     vertice = obstacle.points(v_n,:);
     
+
     if (distance_between_points(collision,vertice)<0.2)
         new_point =  [RDK.targetX, RDK.targetY];
     else
         new_point = [vertice(1)+add_l*sign(vertice(1)-collision(1)),vertice(2)+add_l*sign(vertice(2)-collision(2))];
     end
-    new_point = new_direction+collision;
 end
