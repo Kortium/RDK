@@ -82,24 +82,20 @@ function RDK_Sim(obstacles, showlaser, trajectory)
             laser_model = Laser_Lines_Draw(laser_lines);
         end
         measure_model = Measure_draw(laser_lines, Ray_length);
-        measured_obstacles = Find_obstacles(measure_model);
-        measured_obstacles = Join_obstacles(measured_obstacles);
-        measured_obstacles = Convert_obstacle(RDK, measured_obstacles);
-        measured_obstacles = Sort_obstacles(RDK, measured_obstacles);
+%         measured_obstacles = Find_obstacles(measure_model);
+%         measured_obstacles = Join_obstacles(measured_obstacles);
+%         measured_obstacles = Convert_obstacle(RDK, measured_obstacles);
+%         measured_obstacles = Sort_obstacles(RDK, measured_obstacles);
 %         danger_zones = Find_danger_zones(RDK, measured_obstacles);
         
-        [move_collisions, collision_obstacles] = Collision_detection(RDK,measured_obstacles);
-        if ~isempty(move_collisions)
-            new_point = work_around(RDK, move_collisions, collision_obstacles);
-            if ~RDK.Avoiding_obstacle
-                RDK.Avoiding_obstacle = true;
-            end
-            RDK.workAroundX = new_point(1);
-            RDK.workAroundY = new_point(2);
+        [RDK.Avoiding_obstacle, RDK.Avoiding_heading, avoiding_point] = Collision_avoid(RDK,measured_distance);
+        if RDK.Avoiding_obstacle || RDK.Avoiding_heading
+            RDK.workAroundX = avoiding_point(1);
+            RDK.workAroundY = avoiding_point(2);
         else
             RDK.Avoiding_obstacle = false;
+            RDK.Avoiding_heading = false;
         end
-        
         
         %check target
         if point_reached(RDK)
@@ -126,20 +122,18 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         ax.XLim = [-20 20];
         ax.YLim = [-15 15];
         
-        obstacle_plots = plot_measured_obstacles(measured_obstacles, ax2, obstacle_plots);
+%         obstacle_plots = plot_measured_obstacles(measured_obstacles, ax2, obstacle_plots);
+
         set(RDK_measured_plot,'xdata',model(:,1),'ydata', model(:,2));
         ax2.XLim = [-20 20];
         ax2.YLim = [-15 15];
         set(measure_plot,'xdata',measure_model(:,1),'ydata', measure_model(:,2));
         
         set(RDK_collision_plot,'xdata',model(:,1),'ydata', model(:,2));
-        if ~RDK.Avoiding_obstacle
+        if ~RDK.Avoiding_obstacle && ~RDK.Avoiding_heading
             set(target_line,'xdata',[RDK.x, RDK.targetX],'ydata', [RDK.y, RDK.targetY]);
         else
-            set(target_line,'xdata',[RDK.x, RDK.workAroundX],'ydata', [RDK.y, RDK.workAroundY]);
-        end
-        if (move_collisions)
-            set(collision_plot,'xdata',move_collisions(:,1),'ydata', move_collisions(:,2));
+            set(target_line,'xdata',[RDK.x, RDK.workAroundX, RDK.x, RDK.targetX],'ydata', [RDK.y, RDK.workAroundY, RDK.y, RDK.targetY]);
         end
         drawnow
         %RDK speed projections on X and Y axes.

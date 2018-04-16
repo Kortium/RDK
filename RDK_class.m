@@ -7,6 +7,7 @@ classdef RDK_class
         workAroundX = 0;
         workAroundY = 0;
         Avoiding_obstacle = false;
+        Avoiding_heading = false;
         theta = -pi/4;
     end
     methods
@@ -19,6 +20,22 @@ classdef RDK_class
             point_angle = atan2(obj.y-point(2),obj.x-point(1));
             target_angle = atan2(obj.y-obj.targetY,obj.x-obj.targetX);
             angle = minus_pi_to_pi(target_angle - point_angle);
+        end
+        function angle = get_target_bind_direction(obj,inverse)
+            if inverse
+                target_angle = pi_to_pi(atan2(obj.targetY-obj.y,obj.targetX-obj.x));
+                angle = pi_to_pi(target_angle-obj.theta);
+            else
+                target_angle = pi_to_pi(atan2(obj.targetY-obj.y,obj.targetX-obj.x));
+                angle = pi_to_pi(target_angle-obj.theta);
+            end
+        end
+        function angle = get_target_direction(obj)
+            target_angle = pi_to_pi(atan2(obj.targetY-obj.y,obj.targetX-obj.x));
+            angle = pi_to_pi(target_angle);
+        end
+        function distance = get_target_distance(obj)
+            distance = sqrt((obj.targetY-obj.y)^2+(obj.targetX-obj.x)^2);
         end
     end
 end
