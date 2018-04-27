@@ -62,7 +62,12 @@ function RDK_Sim(obstacles, showlaser, trajectory)
     axes(ax)
     ax.XLim = [-20 20];
     ax.YLim = [-15 15];
+    Xtraj = [RDK.x];
+    Ytraj = [RDK.y];
     RDK_plot = plot(ax,model(:,1), model(:,2),'b','linewidth',3);
+    hold on
+    RDK_trajectory_plot = plot(ax, Xtraj, Ytraj,'m','linewidth',2);
+    plot(ax, trajectory(:,1),trajectory(:,2), '--g','linewidth',2);
     axis equal
     grid on
     if nargin > 1 && showlaser
@@ -105,7 +110,7 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         if point_reached(RDK)
             point_id = point_id+1;
             if (point_id>length(traj))
-                point_id = 1;
+                break
             end
             RDK.targetX = traj(point_id,1);
             RDK.targetY = traj(point_id,2);
@@ -116,10 +121,13 @@ function RDK_Sim(obstacles, showlaser, trajectory)
 
         %use of control
         RDK=RDK.move(V, w, dt);
+        Xtraj = [Xtraj RDK.x];
+        Ytraj = [Ytraj RDK.y];
         
         %draw
         model = Triangle_graph_model(RDK);
         set(RDK_plot,'xdata',model(:,1),'ydata', model(:,2));
+        set(RDK_trajectory_plot,'xdata',Xtraj,'ydata', Ytraj);
         if nargin > 1 && showlaser
             set(Laser_plot,'xdata',laser_model(:,1),'ydata', laser_model(:,2));
         end

@@ -1,5 +1,5 @@
 function new_point = work_around(RDK, move_collisions, obstacles)
-    add_l = 0.6;
+    add_l = 1.6;
     l = length(move_collisions);
     if l>1
         for j=1:l-1
