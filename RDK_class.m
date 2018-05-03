@@ -1,14 +1,14 @@
 classdef RDK_class
     properties
-        x = -7;
-        y = 0;
+        x = 4.5;
+        y = 2;
         targetX = 0;
         targetY = 0;
         workAroundX = 0;
         workAroundY = 0;
         Avoiding_obstacle = false;
         Avoiding_heading = false;
-        theta = -pi/4;
+        theta = -pi;
     end
     methods
         function obj = move (obj, V, w,dt)

@@ -1,5 +1,5 @@
 function sqare = Rectangle_graph_model(Object)
-    base = [-0.15 -0.6; 0.15 -0.6; 0.15 0.6; -0.15 0.6;-0.15 -0.6];
+    base = [-2.5 -3; 2.5 -3; 2.5 3; -2.5 3;-2.5 -3];
     angle = -Object.theta;
     DCM = [cos(angle) sin(angle); -sin(angle) cos(angle)];
     base = base*DCM;

@@ -12,5 +12,9 @@ function Init_obstacles(obstacles,plot)
             model = Rectangle_graph_model(obstacles(i));
             squares(i) = line(plot,model(:,1), model(:,2),'color','r','linewidth',2);
         end
+        if obstacles(i).Type == 4
+            model = Room_graph_model(obstacles(i));
+            squares(i) = line(plot,model(:,1), model(:,2),'color','r','linewidth',2);
+        end
     end
 end

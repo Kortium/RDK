@@ -1,5 +1,5 @@
 function triangle = Triangle_graph_model (Object)
-    base = [-0.2,-0.4;-0.2,0.4;0.6,0;-0.2,-0.4];
+    base = [-0.2,-0.2;-0.2,0.2;0.4,0;-0.2,-0.2];
     angle = Object.theta;
     DCM = [cos(angle) sin(angle); -sin(angle) cos(angle)];
     base = base*DCM;

@@ -14,6 +14,9 @@ function [laser_lines, measured_distance]  = Measure_laser(RDK, Obstacles, Rays,
         if Obstacles(i).Type == 3
         vertices(:,:,i) = Rectangle_graph_model (Obstacles(i));
         end
+        if Obstacles(i).Type == 4
+            vertices(:,:,i) = Room_graph_model (Obstacles(i));
+        end
     end
     laser_lines = zeros(2,2,Rays);
     measured_distance = zeros(1,Rays);
