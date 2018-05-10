@@ -23,10 +23,10 @@ function [avoidingT, avoidingH, point] = Collision_avoid(RDK, measured_distance)
         avoiding_angle_plus = avoiding_angle;
         avoiding_angle_minus = avoiding_angle;
         cnt = 0; 
-        d = 3;
+        d = 2;
         plus_found = false;
         minus_found = false;
-        while (~plus_found && ~minus_found)
+        while (~plus_found || ~minus_found)
             if ~plus_found
                 avoiding_angle_plus = pi_to_pi(avoiding_angle_plus + 0.03);
                 [avoiding_block, ~] = check_range(pi_to_pi(avoiding_angle_plus+target_bind_heading), measured_distance, 0.3,d);
@@ -47,7 +47,7 @@ function [avoidingT, avoidingH, point] = Collision_avoid(RDK, measured_distance)
             end
             cnt = cnt+1;
         end
-        if (abs(avoiding_angle_plus)<abs(avoiding_angle_minus))
+        if (pi_to_pi(-RDK.theta+target_heading+avoiding_angle_plus)<pi_to_pi(-RDK.theta+target_heading+avoiding_angle_minus))
             avoiding_angle=avoiding_angle_plus;
         else
             avoiding_angle=avoiding_angle_minus;
