@@ -66,6 +66,7 @@ function RDK_Sim(obstacles, showlaser, trajectory)
     Ytraj = [RDK.y];
     RDK_plot = plot(ax,model(:,1), model(:,2),'b','linewidth',3);
     hold on
+    zones_plots(1) = plot(ax,0,0,'Color',[1 0.6 0.0],'linewidth',2);
     RDK_trajectory_plot = plot(ax, Xtraj, Ytraj,'m','linewidth',2);
     plot(ax, trajectory(:,1),trajectory(:,2), '--g','linewidth',2);
     axis equal
@@ -79,6 +80,7 @@ function RDK_Sim(obstacles, showlaser, trajectory)
     distance = zeros(model_steps,rays);
     Vx = zeros(1,model_steps);
     Vy = zeros(1,model_steps);
+    dz = [];
     for i = 1:model_steps
         %measurement
         [laser_lines, measured_distance] = Measure_laser(RDK, obstacles, rays, Ray_length);
@@ -91,9 +93,11 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         measured_obstacles = Join_obstacles(measured_obstacles);
         measured_obstacles = Convert_obstacle(RDK, measured_obstacles);
         measured_obstacles = Sort_obstacles(RDK, measured_obstacles);
-%         danger_zones = Find_danger_zones(RDK, measured_obstacles);
+        danger_zones = Find_danger_zones(RDK, measured_obstacles);
+        dz = Join_zones(dz,danger_zones);
+        dz = Sort_zone(dz);
         
-        [move_collisions, collision_obstacles] = Collision_detection(RDK,measured_obstacles);
+        [move_collisions, collision_obstacles] = Collision_detection(RDK,danger_zones);
         if ~isempty(move_collisions)
             new_point = work_around(RDK, move_collisions, collision_obstacles);
             if ~RDK.Avoiding_obstacle
@@ -135,6 +139,8 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         ax.YLim = [-15 15];
         
         obstacle_plots = plot_measured_obstacles(measured_obstacles, ax2, obstacle_plots);
+        set(zones_plots(1),'xdata',dz(:,1),'ydata', dz(:,2))
+%         zones_plots = plot_danger_zones(danger_zones, ax, zones_plots);
         set(RDK_measured_plot,'xdata',model(:,1),'ydata', model(:,2));
         ax2.XLim = [-20 20];
         ax2.YLim = [-15 15];
@@ -158,6 +164,9 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         Vproj = [Vx;Vy];
 %         pause(0.1);
     end
+    dz = [dz; danger_zones(1).points];
+    dz = Sort_zone(dz);
+    set(zones_plots(1),'xdata',dz(:,1),'ydata', dz(:,2))
     assignin('base','projections',Vproj)
     assignin('base','distance',distance)
     load handel
@@ -173,6 +182,26 @@ function plots = plot_measured_obstacles(measured_obstacles, axes, plots)
     if (n_plots<n_obstacles)
         for i = n_plots:n_obstacles
             plots(i) = plot(axes,0,0,'r');
+        end
+    end
+    if n_obstacles>=1
+        for i=1:n_obstacles
+            x1 = measured_obstacles(i).points(1,1);
+            y1 = measured_obstacles(i).points(1,2);
+            set(plots(i),'xdata',[measured_obstacles(i).points(:,1);x1],'ydata',[measured_obstacles(i).points(:,2);y1]);
+        end
+    end
+end
+
+function plots = plot_danger_zones(measured_obstacles, axes, plots)
+    n_obstacles = length(measured_obstacles);
+    n_plots = length(plots);
+    for i = 1:n_plots
+        set(plots(i),'xdata',[0,0],'ydata',[0,0]);
+    end
+    if (n_plots<n_obstacles)
+        for i = n_plots:n_obstacles
+            plots(i) = plot(axes,0,0,'m');
         end
     end
     if n_obstacles>=1

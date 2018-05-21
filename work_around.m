@@ -40,6 +40,6 @@ function new_point = work_around(RDK, move_collisions, obstacles)
     if (distance_between_points(collision,vertice)<0.2)
         new_point =  [RDK.targetX, RDK.targetY];
     else
-        new_point = [vertice(1)+add_l*sign(vertice(1)-collision(1)),vertice(2)+add_l*sign(vertice(2)-collision(2))];
+        new_point = [vertice(1)+add_l*sign(RDK.x-collision(1)),vertice(2)+add_l*sign(RDK.y-collision(2))];
     end
 end
