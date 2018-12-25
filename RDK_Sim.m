@@ -1,5 +1,6 @@
 function RDK_Sim(obstacles, showlaser, trajectory)
 	%Comment
+    initime = cputime;
     RDK = RDK_class;
     point_id = 1;
 
@@ -16,11 +17,11 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         traj = [0,0;6,3];
     end
     
-    f = figure('Visible','on','Name','RDK sim','NumberTitle','off');
+%     f = figure('Visible','on','Name','RDK sim','NumberTitle','off');
 %     ax = axes('Units', 'normalized', 'Position', [0.05 0.05 0.4 0.4]);
 %     ax2 = axes('Units', 'normalized', 'Position', [0.05 0.55 0.4 0.4]);
 %     ax3 = axes('Units', 'normalized', 'Position', [0.55 0.05 0.4 0.4]);
-    ax4 = axes('Units', 'normalized', 'Position', [0.1 0.1 0.8 0.8]);
+%     ax4 = axes('Units', 'normalized', 'Position', [0.1 0.1 0.8 0.8]);
     
 %     axes(ax2)
 %     obstacle_plots(1) = plot(ax2,0,0,'r');
@@ -46,17 +47,17 @@ function RDK_Sim(obstacles, showlaser, trajectory)
 %     ax3.YLim = [-Ray_length*1.1 Ray_length*1.1];
 %     axis equal
 %     grid on
-    
-    axes(ax4)
-    ax4.XLim = [-10 6];
-    ax4.YLim = [-10 7];
-    fsa.x = [];
-    fsa.y = [];
-    hold on
-    RDK_collision_plot = plot(ax4,model(:,1), model(:,2),'b','linewidth',3);
-    Init_obstacles(obstacles, ax4);
-    target_line = plot(ax4,0,0,'LineStyle','--','Color','g','linewidth',2);
-    foot_step = plot(ax4,0,0,'m','linewidth',3);
+%     
+%     axes(ax4)
+%     ax4.XLim = [-10 6];
+%     ax4.YLim = [-10 7];
+%     fsa.x = [];
+%     fsa.y = [];
+%     hold on
+%     RDK_collision_plot = plot(ax4,model(:,1), model(:,2),'b','linewidth',3);
+%     Init_obstacles(obstacles, ax4);
+%     target_line = plot(ax4,0,0,'LineStyle','--','Color','g','linewidth',2);
+%     foot_step = plot(ax4,0,0,'m','linewidth',3);
 %     collision_plot = scatter(ax4,0,0,'*','g');
     axis equal
     grid on
@@ -105,6 +106,7 @@ function RDK_Sim(obstacles, showlaser, trajectory)
             point_id = point_id+1;
             if (point_id>length(traj))
                 point_id = 1;
+                break
             end
             RDK.targetX = traj(point_id,1);
             RDK.targetY = traj(point_id,2);
@@ -131,16 +133,16 @@ function RDK_Sim(obstacles, showlaser, trajectory)
 %         ax2.XLim = [-1 6];
 %         ax2.YLim = [-1 7];
 %         set(measure_plot,'xdata',measure_model(:,1),'ydata', measure_model(:,2));
-        fsa.x = [fsa.x, RDK.x];
-        fsa.y = [fsa.y, RDK.y];
-        set(RDK_collision_plot,'xdata',model(:,1),'ydata', model(:,2));
+%         fsa.x = [fsa.x, RDK.x];
+%         fsa.y = [fsa.y, RDK.y];
+%         set(RDK_collision_plot,'xdata',model(:,1),'ydata', model(:,2));
 %         if ~RDK.Avoiding_obstacle && ~RDK.Avoiding_heading
-            set(target_line,'xdata',trajectory(:,1),'ydata', trajectory(:,2));
+%             set(target_line,'xdata',trajectory(:,1),'ydata', trajectory(:,2));
 %         else
 %             set(target_line,'xdata',[RDK.x, RDK.workAroundX, RDK.x, RDK.targetX],'ydata', [RDK.y, RDK.workAroundY, RDK.y, RDK.targetY]);
 %         end
-        set(foot_step,'xdata',fsa.x,'ydata',fsa.y)
-        drawnow
+%         set(foot_step,'xdata',fsa.x,'ydata',fsa.y)
+%         drawnow
         %RDK speed projections on X and Y axes.
         %The first line of "projections" matrix is X-projections
         %The second line is Y-projections
@@ -152,6 +154,8 @@ function RDK_Sim(obstacles, showlaser, trajectory)
     assignin('base','projections',Vproj)
     assignin('base','distance',distance)
     load handel
+    fintime = cputime;
+    fprintf('CPUTIME: %g\n', fintime - initime);
 %     sound(y,Fs)
 end
 
