@@ -132,32 +132,32 @@ function RDK_Sim(obstacles, showlaser, trajectory)
         
         %draw
         model = Triangle_graph_model(RDK);
-%         set(RDK_plot,'xdata',model(:,1),'ydata', model(:,2));
-%         set(RDK_trajectory_plot,'xdata',Xtraj,'ydata', Ytraj);
-%         if nargin > 1 && showlaser
-%             set(Laser_plot,'xdata',laser_model(:,1),'ydata', laser_model(:,2));
-%         end
-%         ax.XLim = [-20 20];
-%         ax.YLim = [-15 15];
+        set(RDK_plot,'xdata',model(:,1),'ydata', model(:,2));
+        set(RDK_trajectory_plot,'xdata',Xtraj,'ydata', Ytraj);
+        if nargin > 1 && showlaser
+            set(Laser_plot,'xdata',laser_model(:,1),'ydata', laser_model(:,2));
+        end
+        ax.XLim = [-20 20];
+        ax.YLim = [-15 15];
         
-%         obstacle_plots = plot_measured_obstacles(measured_obstacles, ax2, obstacle_plots);
-%         set(zones_plots(1),'xdata',dz(:,1),'ydata', dz(:,2))
-% %         zones_plots = plot_danger_zones(danger_zones, ax, zones_plots);
-%         set(RDK_measured_plot,'xdata',model(:,1),'ydata', model(:,2));
-%         ax2.XLim = [-20 20];
-%         ax2.YLim = [-15 15];
-%         set(measure_plot,'xdata',measure_model(:,1),'ydata', measure_model(:,2));
+        obstacle_plots = plot_measured_obstacles(measured_obstacles, ax2, obstacle_plots);
+        set(zones_plots(1),'xdata',dz(:,1),'ydata', dz(:,2))
+%         zones_plots = plot_danger_zones(danger_zones, ax, zones_plots);
+        set(RDK_measured_plot,'xdata',model(:,1),'ydata', model(:,2));
+        ax2.XLim = [-20 20];
+        ax2.YLim = [-15 15];
+        set(measure_plot,'xdata',measure_model(:,1),'ydata', measure_model(:,2));
         
-%         set(RDK_collision_plot,'xdata',model(:,1),'ydata', model(:,2));
-%         if ~RDK.Avoiding_obstacle
-%             set(target_line,'xdata',[RDK.x, RDK.targetX],'ydata', [RDK.y, RDK.targetY]);
-%         else
-%             set(target_line,'xdata',[RDK.x, RDK.workAroundX],'ydata', [RDK.y, RDK.workAroundY]);
-%         end
-%         if (move_collisions)
-%             set(collision_plot,'xdata',move_collisions(:,1),'ydata', move_collisions(:,2));
-%         end
-%         drawnow
+        set(RDK_collision_plot,'xdata',model(:,1),'ydata', model(:,2));
+        if ~RDK.Avoiding_obstacle
+            set(target_line,'xdata',[RDK.x, RDK.targetX],'ydata', [RDK.y, RDK.targetY]);
+        else
+            set(target_line,'xdata',[RDK.x, RDK.workAroundX],'ydata', [RDK.y, RDK.workAroundY]);
+        end
+        if (move_collisions)
+            set(collision_plot,'xdata',move_collisions(:,1),'ydata', move_collisions(:,2));
+        end
+        drawnow
         %RDK speed projections on X and Y axes.
         %The first line of "projections" matrix is X-projections
         %The second line is Y-projections
