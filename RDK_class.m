@@ -1,7 +1,7 @@
 classdef RDK_class
     properties
-        x = -5.8268;
-        y = 0.1020;
+        x = -10.1422725340136;
+        y = 5;
         targetX = 0;
         targetY = 0;
         workAroundX = 0;

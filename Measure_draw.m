@@ -17,6 +17,14 @@ function measure_model=Measure_draw(laser_lines, ray_length)
             measure_model(j,2) = y;
             j=j+1;
         else
+            d = ray_length;
+            angle = pi_to_pi(i*(360/length(laser_lines)/180)*pi);
+
+            x = cos(angle)*d;
+            y = sin(angle)*d;
+
+            measure_model(j,1) = x;
+            measure_model(j,2) = y;
             j=j+1;
         end
     end

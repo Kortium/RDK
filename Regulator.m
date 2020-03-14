@@ -58,8 +58,8 @@ end
 
 function heading_k = heading_k(value)
     if value>=0
-		heading_k = exp(3.26*(-value));
+		heading_k = exp(30.26*(-value));
     else
-		heading_k = exp(3.26*value);
+		heading_k = exp(30.26*value);
     end
 end
